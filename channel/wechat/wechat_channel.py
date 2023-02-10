@@ -17,7 +17,7 @@ thead_pool = ThreadPoolExecutor(max_workers=8)
 
 
 @itchat.msg_register(TEXT)
-def handler_single_msg(msg):
+def handler_single_msg(msg):   #message initial
     WechatChannel().handle(msg)
     return None
 
@@ -68,9 +68,9 @@ class WechatChannel(Channel):
             img_match_prefix = self.check_prefix(content, conf().get('image_create_prefix'))
             if img_match_prefix:
                 content = content.split(img_match_prefix, 1)[1].strip()
-                thead_pool.submit(self._do_send_img, content, to_user_id)
+                thead_pool.submit(self._do_send_img, content, to_user_id) #to _do_send_img
             else:
-                thead_pool.submit(self._do_send, content, to_user_id)
+                thead_pool.submit(self._do_send, content, to_user_id) #to _do_send
 
 
     def handle_group(self, msg):
@@ -101,7 +101,7 @@ class WechatChannel(Channel):
 
     def send(self, msg, receiver):
         logger.info('[WX] sendMsg={}, receiver={}'.format(msg, receiver))
-        itchat.send(msg, toUserName=receiver)
+        itchat.send(msg, toUserName=receiver)  #return the answer to wechat
 
     def _do_send(self, query, reply_user_id):
         try:
@@ -109,9 +109,9 @@ class WechatChannel(Channel):
                 return
             context = dict()
             context['from_user_id'] = reply_user_id
-            reply_text = super().build_reply_content(query, context)
+            reply_text = super().build_reply_content(query, context)  #call openai get the answer  throw bridge
             if reply_text:
-                self.send(conf().get("single_chat_reply_prefix") + reply_text, reply_user_id)
+                self.send(conf().get("single_chat_reply_prefix") + reply_text, reply_user_id) #to send the answer to wechat user
         except Exception as e:
             logger.exception(e)
 
