@@ -22,5 +22,5 @@ def create_bot(bot_type):
     elif bot_type == 'openAI':
         # OpenAI 官方对话模型API
         from bot.openai.open_ai_bot import OpenAIBot
-        return OpenAIBot()
+        return OpenAIBot()  #to reply method
     raise RuntimeError

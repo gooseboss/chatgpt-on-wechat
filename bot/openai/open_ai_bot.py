@@ -26,18 +26,18 @@ class OpenAIBot(Bot):
             new_query = Session.build_session_query(query, from_user_id)
             logger.debug("[OPEN_AI] session query={}".format(new_query))
 
-            reply_content = self.reply_text(new_query, from_user_id, 0)
+            reply_content = self.reply_text(new_query, from_user_id, 0)  #to reply_text method
             logger.debug(
                 "[OPEN_AI] new_query={}, user={}, reply_cont={}".format(
                     new_query, from_user_id, reply_content
                 )
             )
             if reply_content and query:
-                Session.save_session(query, reply_content, from_user_id)
-            return reply_content
+                Session.save_session(query, reply_content, from_user_id) # session for context（上下文）
+            return reply_content  # to wechat_channel's method:  _do_send
 
         elif context.get("type", None) == "IMAGE_CREATE":
-            return self.create_img(query, 0)
+            return self.create_img(query, 0)  #to image 
 
     def reply_text(self, query, user_id, retry_count=0):
         try:
@@ -131,7 +131,7 @@ class Session(object):
 
     @staticmethod
     def save_session(query, answer, user_id):
-        max_tokens = conf().get("conversation_max_tokens")
+        max_tokens = conf().get("conversation_max_tokens")  #上下文记忆
         if not max_tokens:
             # default 3000
             max_tokens = 1000

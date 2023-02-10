@@ -121,7 +121,7 @@ class WechatChannel(Channel):
                 return
             context = dict()
             context['type'] = 'IMAGE_CREATE'
-            img_url = super().build_reply_content(query, context)
+            img_url = super().build_reply_content(query, context) #get the answer
             if not img_url:
                 return
 
